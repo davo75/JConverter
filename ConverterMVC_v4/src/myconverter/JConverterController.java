@@ -63,14 +63,17 @@ public class JConverterController {
         @Override
         public void keyReleased(KeyEvent e) {
             try {
-
+		theView.clearMsg();
                 theModel.setToBox(false);
                 theModel.doConversion(theView.getFromValue());
                 theView.setToValue(theModel.getConversionResult());
 
             } catch (NumberFormatException ex) {
-
+		//if (theModel.getUnitCategory() ==0 && e.getKeyChar() == '-') {
+		    //System.out.println("negative entered for distance");
+		
                 theView.displayMsg("Enter a proper number.", "Input Warning", "warning");
+		//}
             }
         }
     }
