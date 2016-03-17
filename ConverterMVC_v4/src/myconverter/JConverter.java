@@ -27,13 +27,15 @@ public class JConverter {
             java.util.logging.Logger.getLogger(JConverter.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
+        //creat main view
         JConverterView theView = new JConverterView();
-        JConverterModel theModel = new JConverterModel();
-
+	//create the Importer Dialog view
         JImporterView theImportView = new JImporterView(theView, true);
+	//create the model
+        JConverterModel theModel = new JConverterModel();	
+	//create the contoller
         JConverterController theController = new JConverterController(theView, theModel, theImportView);
-
+	//set the main form visible
         theView.setVisible(true);
     }
 
