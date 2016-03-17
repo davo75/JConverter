@@ -83,7 +83,7 @@ public class JConverterController {
         @Override
         public void keyReleased(KeyEvent e) {
             try {
-
+		theView.clearMsg();    
                 theModel.setToBox(true);
                 theModel.doConversion(theView.getToValue());
                 theView.setFromValue(theModel.getConversionResult());
