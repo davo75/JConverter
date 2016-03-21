@@ -5,6 +5,7 @@
  */
 package myconverter;
 
+import static com.sun.javafx.tk.Toolkit.getToolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -62,18 +63,23 @@ public class JConverterController {
 
         @Override
         public void keyReleased(KeyEvent e) {
-            try {
+            try {                             
+            
 		theView.clearMsg();
                 theModel.setToBox(false);
-                theModel.doConversion(theView.getFromValue());
-                theView.setToValue(theModel.getConversionResult());
+                
+                if (theView.getFromValue() < 0 && theModel.getUnitCategory() == 0) {                    
+                    throw new NumberFormatException("No negative numbers.");
+                } else { 
+                    theModel.doConversion(theView.getFromValue());
+                    theView.setToValue(theModel.getConversionResult());
+                }
 
             } catch (NumberFormatException ex) {
-		//if (theModel.getUnitCategory() ==0 && e.getKeyChar() == '-') {
-		    //System.out.println("negative entered for distance");
 		
-                theView.displayMsg("Enter a proper number.", "Input Warning", "warning");
-		//}
+		//System.out.println(ex.getMessage());
+                theView.displayMsg("Invalid input. " + ex.getMessage(), "warning");
+		
             }
         }
     }
@@ -85,12 +91,17 @@ public class JConverterController {
             try {
 		theView.clearMsg();    
                 theModel.setToBox(true);
-                theModel.doConversion(theView.getToValue());
-                theView.setFromValue(theModel.getConversionResult());
+                
+                if (theView.getToValue() < 0 && theModel.getUnitCategory() == 0) {                    
+                    throw new NumberFormatException("No negative numbers.");
+                } else { 
+                    theModel.doConversion(theView.getToValue());
+                    theView.setFromValue(theModel.getConversionResult());
+                }                
 
             } catch (NumberFormatException ex) {
 
-                theView.displayMsg("Enter a proper number.", "Input Warning", "warning");
+                theView.displayMsg("Invalid input. " + ex.getMessage(), "error");
             }
         }
     }
@@ -103,7 +114,7 @@ public class JConverterController {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 JComboBox cb = (JComboBox) e.getSource();
                 theModel.setUnitCategory(cb.getSelectedIndex());
-
+                
                 theImportView.setUnitFromItems(theModel.getConversionItems());
                 theImportView.setUnitToItems(theModel.getConversionItems());
                 theImportView.setToCategory(1);
@@ -120,7 +131,7 @@ public class JConverterController {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 JComboBox cb = (JComboBox) e.getSource();
                 theModel.setUnitCategory(cb.getSelectedIndex());
-
+                theView.clearMsg(); 
                 theView.setFromValue(1);
                 theView.setUnitFromItems(theModel.getConversionItems());
                 theView.setUnitToItems(theModel.getConversionItems());

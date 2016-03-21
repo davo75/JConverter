@@ -290,7 +290,7 @@ public class JConverterView extends javax.swing.JFrame {
         menuImport.addActionListener(listenForImport);
     }
 
-    void displayMsg(String msg, String msgTitle, String msgType) {
+    void displayMsg(String msg, String msgType) {
         switch (msgType) {
             case "error":
                 //JOptionPane.showMessageDialog(this, msg, msgTitle, JOptionPane.ERROR_MESSAGE);
