@@ -49,8 +49,6 @@ public class JImporterView extends javax.swing.JDialog {
         btnImport.addActionListener(listenForImportBtn);
     }
     
- 
-    
     void addCancelListener(ActionListener listenForCancelBtn) {
         btnImportCancel.addActionListener(listenForCancelBtn);
     }

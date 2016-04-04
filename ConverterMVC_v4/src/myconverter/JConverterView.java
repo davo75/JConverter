@@ -11,7 +11,6 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 /**

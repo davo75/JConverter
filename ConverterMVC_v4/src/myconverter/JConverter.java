@@ -1,7 +1,13 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ This program converts between metric and imperial measurements. 
+ 
+ @author David Pyle 041110777
+ @version 1.0
+ @since 4/4/2016
+  
+ Methods:
+    + void main(String[] args)  
+
  */
 package myconverter;
 
@@ -10,7 +16,12 @@ package myconverter;
  * @author davidpyle
  */
 public class JConverter {
-
+     /**
+     * Main method that creates the model, views and controller objects and then
+     * displays the view
+     * @param args not used
+     */
+     
     public static void main(String[] args) {
         
         /* Set the Nimbus look and feel */
@@ -27,7 +38,7 @@ public class JConverter {
             java.util.logging.Logger.getLogger(JConverter.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //creat main view
+        //create main view
         JConverterView theView = new JConverterView();
 	//create the Importer Dialog view
         JImporterView theImportView = new JImporterView(theView, true);
