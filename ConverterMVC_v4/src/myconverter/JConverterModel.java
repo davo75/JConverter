@@ -8,21 +8,21 @@
  @since 4/4/2016
   
  Methods:
-    - int getUnitCategory()
-    - void setUnitCategory(int whichUnits)   
-    - void setUnitFromIndex(int fromIndex)
-    - int getUnitFromIndex()
-    - void setUnitToIndex(int toIndex)
-    - int getUnitToIndex()
-    - void setToBox(boolean val)
+    + int getUnitCategory()
+    + void setUnitCategory(int whichUnits)   
+    + void setUnitFromIndex(int fromIndex)
+    + int getUnitFromIndex()
+    + void setUnitToIndex(int toIndex)
+    + int getUnitToIndex()
+    + void setToBox(boolean val)
     - String formatValue(double value)
-    - void doConversion(double valueToConvert)
-    - String txtFileHeaders()
-    - String writeToFile(String content, String path)
-    - String convertFile(String importPath, String savePath)
-    - double getConversionResult()
-    - String[] getConversionItems()
-    - String[] getUnitMenuItems()
+    + void doConversion(double valueToConvert)
+    + String txtFileHeaders()
+    + String writeToFile(String content, String path)
+    + String convertFile(String importPath, String savePath)
+    + double getConversionResult()
+    + String[] getConversionItems()
+    + String[] getUnitMenuItems()
 
  Classes this class requires    
     java.io.BufferedReader;

@@ -1,8 +1,45 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ This view class is reponsible for import file view. It allows the user
+ to choose a file of values to import, set a path to an output file and select
+ between several units of measurements to for conversion.
+ 
+ @author David Pyle 041110777
+ @version 1.0
+ @since 4/4/2016
+  
+ Methods:
+    + void addUnitCatListener(ItemListener listenUnitCat)
+    + void addUnitFromListener(ItemListener listenUnitFrom)
+    + void addUnitToListener(ItemListener listenUnitTo)
+    + void addImportListener(ActionListener listenForImportBtn)
+    + void addCancelListener(ActionListener listenForCancelBtn)
+    + void addBrowseListener(ActionListener listenForBrowse)
+    + void addSaveListener(ActionListener listenForSave)
+    + void setImportLocation(String location)
+    + String getImportLocation()
+    + void setSaveLocation(String location)
+    + String getSaveLocation()
+    + void setUnitCategory(int unitCat)
+    + int getUnitCategory()
+    + void setUnitFromItems(String[] unitFromCat)
+    + void setUnitCat(String[] unitCat)
+    + void setUnitToItems(String[] unitToCat)
+    + void setToCategory(int index)
+    + void displayMsg(String msg, String msgTitle, String msgType)
+    + void clearForm()
+    - void btnBrowseActionPerformed(java.awt.event.ActionEvent evt)
+    - void btnSaveActionPerformed(java.awt.event.ActionEvent evt)
+
+
+ Classes this class requires    
+    java.awt.event.ActionListener;
+    java.awt.event.ItemListener;
+    java.io.File;
+    javax.swing.JFileChooser;
+    javax.swing.JOptionPane;
+    javax.swing.filechooser.FileNameExtensionFilter;
  */
+
 package myconverter;
 
 import java.awt.event.ActionListener;
@@ -22,61 +59,127 @@ public class JImporterView extends javax.swing.JDialog {
     private String fileImportLocation;
     private String fileSaveLocation;
     private final JFileChooser fc;
+    
     /**
-     * Creates new form NewJDialog
-     * @param parent
-     * @param modal
-     */
+    * Constructor
+    * 
+    * @param parent the parent form
+    * @param modal sets the modality of the dialog window
+    */
     public JImporterView(java.awt.Frame parent, boolean modal) {
+        //set the parnt form and modality
         super(parent, modal);
+        //initialise interface components
         initComponents();
+        //create a file chooser dialog
         fc = new JFileChooser();
     }
 
-    void addUnitCatListener(ItemListener listenUnitCat) {
+    /**
+     * Adds a listener to the Unit Category comboBox
+     *
+     * @param listenUnitCat the ItemListener that listens for a change to the 
+     * Unit Category comboBox
+     */
+    public void addUnitCatListener(ItemListener listenUnitCat) {
         cbUnitCat.addItemListener(listenUnitCat);
     }
     
-    void addUnitFromListener(ItemListener listenUnitFrom) {
+    /**
+     * Adds a listener to the Unit From comboBox
+     *
+     * @param listenUnitFrom the ItemListener that listens for a change to the 
+     * Unit From comboBox
+     */
+    public void addUnitFromListener(ItemListener listenUnitFrom) {
         cbConvertFrom.addItemListener(listenUnitFrom);
     }
     
-    void addUnitToListener(ItemListener listenUnitTo) {
+    public void addUnitToListener(ItemListener listenUnitTo) {
         cbConvertTo.addItemListener(listenUnitTo);
     }
     
-    void addImportListener(ActionListener listenForImportBtn) {
+    /**
+     * Adds a listener to the import button
+     *
+     * @param listenForImportBtn the ActionListener that listens for an import 
+     * button click
+     */
+    public void addImportListener(ActionListener listenForImportBtn) {
         btnImport.addActionListener(listenForImportBtn);
     }
     
-    void addCancelListener(ActionListener listenForCancelBtn) {
+    /**
+     * Adds a listener to the cancel button
+     *
+     * @param listenForCancelBtn the ActionListener that listens for a cancel 
+     * button click
+     */
+    public void addCancelListener(ActionListener listenForCancelBtn) {
         btnImportCancel.addActionListener(listenForCancelBtn);
     }
     
-    void addBrowseListener(ActionListener listenForBrowse) {
+    /**
+     * Adds a listener to the browse button
+     *
+     * @param listenForBrowse the ActionListener that listens for a browse 
+     * button click
+     */
+    public void addBrowseListener(ActionListener listenForBrowse) {
         btnBrowse.addActionListener(listenForBrowse);
     }
     
-    void addSaveListener(ActionListener listenForSave) {
+    /**
+     * Adds a listener to the save button
+     *
+     * @param listenForSave the ActionListener that listens for a save 
+     * button click
+     */
+    public void addSaveListener(ActionListener listenForSave) {
         btnSave.addActionListener(listenForSave);
     }
     
+     /**
+     * Sets the location for the import file
+     *
+     * @param location the path to the input file 
+     */
     public void setImportLocation(String location) {
         fileImportLocation = location;
     }
     
+     /**
+     * Gets the location for the import file
+     *
+     * @return  the path to the input file 
+     */
     public String getImportLocation() {
         return fileImportLocation;
     }
     
+     /**
+     * Sets the save location for the output file
+     *
+     * @param location the path to the output file 
+     */
     public void setSaveLocation(String location) {
         fileSaveLocation = location;
     }
     
+    /**
+     * Gets the location for the output file
+     *
+     * @return  the path to the output file 
+     */
     public String getSaveLocation() {
         return fileSaveLocation;
     }
     
+    /**
+     * Sets the index of a Unit Category menu item
+     *
+     * @param unitCat the index of the menu item
+     */
     public void setUnitCategory(int unitCat) {
         cbUnitCat.setSelectedIndex(unitCat);
     }
@@ -85,56 +188,93 @@ public class JImporterView extends javax.swing.JDialog {
         return cbUnitCat.getSelectedIndex();
     }
     
+    /**
+     * Populates the Unit From comboxBox
+     *
+     * @param unitFromCat the menu items to add
+     */
     public void setUnitFromItems(String[] unitFromCat) {
         
+        //clear any items from the comboBox
         cbConvertFrom.removeAllItems();       
-        
+        //add the items
         for (String conversion : unitFromCat) {
             cbConvertFrom.addItem(conversion);
         }  	
     }
     
+    /**
+     * Populates the Unit Category comboxBox
+     *
+     * @param unitCat the menu items to add
+     */
      public void setUnitCat(String[] unitCat) {
-        
+        //clear any items from the comboBox
         cbUnitCat.removeAllItems();       
-        
+         //add the items
         for (String conversion : unitCat) {
             cbUnitCat.addItem(conversion);
         }  	
     }
     
+     /**
+     * Populates the Unit To comboxBox
+     *
+     * @param unitToCat the menu items to add
+     */
      public void setUnitToItems(String[] unitToCat) {
-        
+        //clear any items from the comboBox
         cbConvertTo.removeAllItems();       
-        
+        //add the items
         for (String conversion : unitToCat) {
             cbConvertTo.addItem(conversion);
         }  	
     }
     
+     /**
+     * Sets the index of a Unit To menu item
+     *
+     * @param index the index of the menu item
+     */
      public void setToCategory(int index) {
         cbConvertTo.setSelectedIndex(index);
     }
      
-   
-    void displayMsg(String msg, String msgTitle, String msgType) {
+    /**
+     * Displays error/warning messages
+     *
+     * @param msg the message to display
+     * @param msgTitle the message title
+     * @param msgType the message type (error or warning)
+     */
+    public void displayMsg(String msg, String msgTitle, String msgType) {
         switch(msgType) {
+            //show error message
             case "error":
                 JOptionPane.showMessageDialog(this, msg, msgTitle, JOptionPane.ERROR_MESSAGE);
                 break;
+                //show warning message
             case "warning":
                 JOptionPane.showMessageDialog(this, msg, msgTitle, JOptionPane.WARNING_MESSAGE);
                 break;
+                //show other messages
             default:
                 JOptionPane.showMessageDialog(this, msg);                        
         }        
     }
     
-    
+    /**
+     * Reset the import dialog file input and output fields
+     *
+     */
     public void clearForm() {
+        //set import file path text box to null
         this.tfImportFilePath.setText(null);
+        //set save location path text box to null
         this.tfSaveLocPath.setText(null);
+        //set save location to null
         setSaveLocation(null);
+        //set import locaton to null
         setImportLocation(null);
     }
     
@@ -307,11 +447,19 @@ public class JImporterView extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Displays a file chooser dialog when the browse button is clicked
+     *
+     * @param evt the browse button click event
+     */
     private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
-        //JFileChooser fc = new JFileChooser();
+        
+        //set the filter for choosing files to text files only
         FileNameExtensionFilter filter = new FileNameExtensionFilter(".txt files", "txt", "text");
         fc.setFileFilter(filter);
+        //open the file chooser dialog
         int returnVal = fc.showOpenDialog(null);
+        //get the input file
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();           
             setImportLocation(file.getAbsolutePath());
@@ -319,11 +467,18 @@ public class JImporterView extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnBrowseActionPerformed
 
+    /**
+     * Displays a file chooser dialog when the save button is clicked
+     *
+     * @param evt the save button click event
+     */
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        //JFileChooser fc = new JFileChooser();
+        //set the filter for choosing files to text files only
         FileNameExtensionFilter filter = new FileNameExtensionFilter(".txt files", "txt", "text");
         fc.setFileFilter(filter);
+        //open the file chooser dialog
         int returnVal = fc.showSaveDialog(null);
+        //set the output file location
         if (returnVal == JFileChooser.APPROVE_OPTION) {            
             File file = fc.getSelectedFile();            
             String filePath = file.getAbsolutePath();

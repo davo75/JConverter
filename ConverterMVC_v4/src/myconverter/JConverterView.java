@@ -1,28 +1,35 @@
 /*
- This model class is reponsible for the logic of the converter. It performs the
- conversion calculations for display on the views and also writes the converted
- value to a file.
+ This view class is reponsible for main user interface view. It allows the user
+ to interact with the application. The user can choose between several untis of 
+ measurements and enter a value to convert. Conversion can be in either direction.
  
  @author David Pyle 041110777
  @version 1.0
  @since 4/4/2016
   
  Methods:
-    - int getUnitCategory()
-    - void setUnitCategory(int whichUnits)   
-    - void setUnitFromIndex(int fromIndex)
-    - int getUnitFromIndex()
-    - void setUnitToIndex(int toIndex)
-    - int getUnitToIndex()
-    - void setToBox(boolean val)
     - String formatValue(double value)
-    - void doConversion(double valueToConvert)
-    - String txtFileHeaders()
-    - String writeToFile(String content, String path)
-    - String convertFile(String importPath, String savePath)
-    - double getConversionResult()
-    - String[] getConversionItems()
-    - String[] getUnitMenuItems()
+    + double getFromValue()   
+    + double getToValue()
+    + void setFromValue(double convertedValue)
+    + double getToValue()
+    + void setToValue(double convertedValue)
+    + void setFromCategory(int index)
+    + void setToCategory(int index)
+    + void setUnitCategory(int unitCat)
+    + int getUnitCategory()
+    + void setUnitFromItems(String[] unitFromCat)
+    + void setUnitToItems(String[] unitToCat)
+    + void setUnitCat(String[] unitCat)
+    + void addInputFromListener(KeyAdapter listenInputFrom)
+    + void addInputToListener(KeyAdapter listenInputTo)
+    + void addUnitCatListener(ItemListener listenUnitCat)
+    + void addUnitFromListener(ItemListener listenUnitFrom)
+    + void addUnitToListener(ItemListener listenUnitTo)
+    + void addExitListener(ActionListener listenForExit)
+    + void addImportMenuListener(ActionListener listenForImport)
+    + void displayMsg(String msg, String msgType)
+    + void clearMsg()
 
  Classes this class requires    
     java.awt.Toolkit;
@@ -33,7 +40,6 @@
     java.text.DecimalFormat;
     javax.swing.KeyStroke;
  */
-
 package myconverter;
 
 import java.awt.Toolkit;
@@ -51,12 +57,14 @@ import javax.swing.KeyStroke;
 public class JConverterView extends javax.swing.JFrame {
 
     /**
-     * Creates new form JConverterView
+     * Constructor Initialises interface components and sets keyboard shortcuts
      */
     public JConverterView() {
-        
+
         initComponents();
+        //set keyboard shortcut for showing Import Dialog (Ctrl-I)
         menuImport.setAccelerator(KeyStroke.getKeyStroke('I', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        //set keyboard shortcut for quitting application (Ctrl-Q)
         menuExit.setAccelerator(KeyStroke.getKeyStroke('Q', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
     }
 
@@ -207,139 +215,256 @@ public class JConverterView extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Formats a number to 5 decimal places
+     *
+     * @param value the number to format
+     * @return string representation 5 decimal placed number
+     */
     private String formatValue(double value) {
 
+        //number of decimal places to set
         int decimalPlaces = 5;
+        //create a new BigDecimal object with value rounded up
         BigDecimal bd = new BigDecimal(value);
         bd = bd.setScale(decimalPlaces, BigDecimal.ROUND_HALF_UP);
 
+        //format the value
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(5);
         df.setMinimumFractionDigits(0);
         df.setGroupingUsed(false);
 
         String result = df.format(bd);
-
+        //return the string version of the formatted value
         return result;
     }
 
+    /**
+     * Gets the value entered into the From input box
+     *
+     * @return the value entered
+     */
     public double getFromValue() {
+        //check something entered
         if (txtUnitFrom.getText().isEmpty()) {
             return 0;
-        } else {                    
+        } else {
             return Double.parseDouble(txtUnitFrom.getText());
         }
     }
 
+    /**
+     * Sets the From input to the converted value
+     *
+     * @param convertedValue the converted value
+     */
     public void setFromValue(double convertedValue) {
-        //System.out.println("Setting from value in textfield: " + convertedValue);
+
         txtUnitFrom.setText(formatValue(convertedValue));
     }
 
+    /**
+     * Gets the value entered into the To input box
+     *
+     * @return the value entered
+     */
     public double getToValue() {
+        //check something entered
         if (txtUnitTo.getText().isEmpty()) {
             return 0;
-        } else {                    
+        } else {
             return Double.parseDouble(txtUnitTo.getText());
         }
     }
 
+    /**
+     * Sets the To input to the converted value
+     *
+     * @param convertedValue the converted value
+     */
     public void setToValue(double convertedValue) {
-        //System.out.println("Setting to value in textfield: " + convertedValue);
+
         txtUnitTo.setText(formatValue(convertedValue));
     }
 
+    /**
+     * Sets the index of the From unit of measurement comboxBox
+     *
+     * @param index the index to set to
+     */
     public void setFromCategory(int index) {
         cmbUnitFrom.setSelectedIndex(index);
     }
 
+    /**
+     * Sets the index of the To unit of measurement comboxBox
+     *
+     * @param index the index to set to
+     */
     public void setToCategory(int index) {
         cmbUnitTo.setSelectedIndex(index);
     }
 
+    /**
+     * Sets the index of the Unit Category comboBox
+     *
+     * @param unitCat the index to set to
+     */
     public void setUnitCategory(int unitCat) {
         cmbUnitCategory.setSelectedIndex(unitCat);
     }
 
+    /**
+     * Gets the index selected in the Unit Category comboBox
+     *
+     * @return the index selected
+     */
     public int getUnitCategory() {
         return cmbUnitCategory.getSelectedIndex();
     }
 
+    /**
+     * Populates the From comboBox menu items
+     *
+     * @param unitFromCat the menu items
+     */
     public void setUnitFromItems(String[] unitFromCat) {
 
+        //clear any items in the comboBox
         cmbUnitFrom.removeAllItems();
 
+        //add the menu items
         for (String conversion : unitFromCat) {
             cmbUnitFrom.addItem(conversion);
         }
     }
 
+    /**
+     * Populates the To comboBox menu items
+     *
+     * @param unitToCat the menu items
+     */
     public void setUnitToItems(String[] unitToCat) {
 
+        //clear any items in the comboBox
         cmbUnitTo.removeAllItems();
 
+        //add the menu items
         for (String conversion : unitToCat) {
             cmbUnitTo.addItem(conversion);
         }
     }
 
+    /**
+     * Populates the Unit Category comboBox menu items
+     *
+     * @param unitCat the menu items
+     */
     public void setUnitCat(String[] unitCat) {
 
+        //clear any items in the comboBox
         cmbUnitCategory.removeAllItems();
 
+        //add the menu items
         for (String conversion : unitCat) {
             cmbUnitCategory.addItem(conversion);
         }
     }
 
-    void addInputFromListener(KeyAdapter listenInputFrom) {
+    /**
+     * Adds a listener to the From input box
+     *
+     * @param listenInputFrom the keyAdapter that listens for a key press
+     */
+    public void addInputFromListener(KeyAdapter listenInputFrom) {
         txtUnitFrom.addKeyListener(listenInputFrom);
     }
 
-    void addInputToListener(KeyAdapter listenInputTo) {
+    /**
+     * Adds a listener to the To input box
+     *
+     * @param listenInputTo the keyAdapter that listens for a key press
+     */
+    public void addInputToListener(KeyAdapter listenInputTo) {
         txtUnitTo.addKeyListener(listenInputTo);
     }
 
-    void addUnitCatListener(ItemListener listenUnitCat) {
+    /**
+     * Adds a listener to the Unit Category comboBox
+     *
+     * @param listenUnitCat the ItemListener that listens for comboBox change
+     */
+    public void addUnitCatListener(ItemListener listenUnitCat) {
         cmbUnitCategory.addItemListener(listenUnitCat);
     }
 
-    void addUnitFromListener(ItemListener listenUnitFrom) {
+    /**
+     * Adds a listener to the From Unit comboBox
+     *
+     * @param listenUnitFrom the ItemListener that listens for comboBox change
+     */
+    public void addUnitFromListener(ItemListener listenUnitFrom) {
         cmbUnitFrom.addItemListener(listenUnitFrom);
     }
 
-    void addUnitToListener(ItemListener listenUnitTo) {
+    /**
+     * Adds a listener to the To Unit comboBox
+     *
+     * @param listenUnitTo the ItemListener that listens for comboBox change
+     */
+    public void addUnitToListener(ItemListener listenUnitTo) {
         cmbUnitTo.addItemListener(listenUnitTo);
     }
 
-    void addExitListener(ActionListener listenForExit) {
+    /**
+     * Adds a listener to the exit menu item
+     *
+     * @param listenForExit the ActionListener that listens for a exit menu
+     * click
+     */
+    public void addExitListener(ActionListener listenForExit) {
         menuExit.addActionListener(listenForExit);
     }
 
-    void addImportMenuListener(ActionListener listenForImport) {
+    /**
+     * Adds a listener to the import menu item
+     *
+     * @param listenForImport the ActionListener that listens for a import menu
+     * click
+     */
+    public void addImportMenuListener(ActionListener listenForImport) {
         menuImport.addActionListener(listenForImport);
     }
 
-    void displayMsg(String msg, String msgType) {
+    /**
+     * Displays error/warning messages
+     *
+     * @param msg the message to display
+     * @param msgType the message type (error or warning)
+     */
+    public void displayMsg(String msg, String msgType) {
         switch (msgType) {
+            //error messages
             case "error":
-                //JOptionPane.showMessageDialog(this, msg, msgTitle, JOptionPane.ERROR_MESSAGE);
-		lblMessage.setText("Error: " + msg);
+                lblMessage.setText("Error: " + msg);
                 break;
+            //warning messages
             case "warning":
-                //JOptionPane.showMessageDialog(this, msg, msgTitle, JOptionPane.WARNING_MESSAGE);
-		lblMessage.setText("Warning: " + msg);
+                lblMessage.setText("Warning: " + msg);
                 break;
+            //default messages
             default:
-                //JOptionPane.showMessageDialog(this, msg);
-		lblMessage.setText(msg);
-
+                lblMessage.setText(msg);
         }
-	
+
     }
-    
-    void clearMsg() {
-	lblMessage.setText(null);
+
+    /**
+     * Clears any error/warning messages
+     */
+    public void clearMsg() {
+        lblMessage.setText(null);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
