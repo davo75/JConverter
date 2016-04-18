@@ -37,8 +37,11 @@ import javax.swing.JComboBox;
 
 public class JConverterController {
 
+    //class instance variables for the main view
     private final JConverterView theView;
+    //class instance variables for the moel
     private final JConverterModel theModel;
+    //class instance variables for the import dialog view
     private final JImporterView theImportView;
     
     /**
@@ -62,7 +65,7 @@ public class JConverterController {
     }
 
     /**
-     * This method converts adds all the event listeners for the main view and 
+     * This method adds all the event listeners for the main view and 
      * import dialog view     
      */
     private void setupListeners() {
@@ -153,7 +156,7 @@ public class JConverterController {
         /**
         * Validates the input then passes the To value for conversion and displays
         * the result
-        * @param  e the generated KeyEvent   * 
+        * @param  e the generated KeyEvent    
         */
         @Override
         public void keyReleased(KeyEvent e) {
