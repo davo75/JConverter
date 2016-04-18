@@ -1,8 +1,39 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ This model class is reponsible for the logic of the converter. It performs the
+ conversion calculations for display on the views and also writes the converted
+ value to a file.
+ 
+ @author David Pyle 041110777
+ @version 1.0
+ @since 4/4/2016
+  
+ Methods:
+    - int getUnitCategory()
+    - void setUnitCategory(int whichUnits)   
+    - void setUnitFromIndex(int fromIndex)
+    - int getUnitFromIndex()
+    - void setUnitToIndex(int toIndex)
+    - int getUnitToIndex()
+    - void setToBox(boolean val)
+    - String formatValue(double value)
+    - void doConversion(double valueToConvert)
+    - String txtFileHeaders()
+    - String writeToFile(String content, String path)
+    - String convertFile(String importPath, String savePath)
+    - double getConversionResult()
+    - String[] getConversionItems()
+    - String[] getUnitMenuItems()
+
+ Classes this class requires    
+    java.awt.Toolkit;
+    java.awt.event.ActionListener;
+    java.awt.event.ItemListener;
+    java.awt.event.KeyAdapter;
+    java.math.BigDecimal;
+    java.text.DecimalFormat;
+    javax.swing.KeyStroke;
  */
+
 package myconverter;
 
 import java.awt.Toolkit;
