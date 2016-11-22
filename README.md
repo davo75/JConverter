@@ -1,2 +1,3 @@
-# jconverter
-Assignment project for college. Converts between imperial and metric units of measurements.
+# JConverter
+Java based college assignment project that converts between imperial and metric units of measurements.
+
